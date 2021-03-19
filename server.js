@@ -15,10 +15,10 @@ app.get('/', function (req, res){
     try{
         let arr =[]
         for(let k of messages){
-            arr.push(k.message)
+            arr.push(k)
         }
-        var result = arr.toString()
-        res.send(result)
+        // var result = arr.toString() para desvolverlo en string
+        res.send(arr)
 
     }catch(err){
         console.log(err)
@@ -28,47 +28,44 @@ app.get('/', function (req, res){
 // const data = {id:3, message:"klk"}
 
 app.post('/messages', async function(req, res){
+    
+    var message=  req.body;
     try{
 
-        var id= req.body;
-        var message=  req.body;
-        var re= await messages.push(message)
+        await messages.push(message)
         console.log(messages)
-        res.send("done")
+        res.status(200).send("message added")
     }
     catch(err){
-        console.log(err)
+        res.status(400).send("bad request")
     }
     
 
 })
 
 app.put('/messages/:id', function(req,res){
+    var id = req.params.id
+    
+    var Newmessage = req.body.message
+   
     try{
-        var id = req.params.id
-        
-        var Newmessage = req.body.message
-       
         messages.map((x)=>{
             if(x.id==id){
                 x.message = Newmessage;
             }
             return Newmessage
         })
-        console.log("nuevo",Newmessage)
-        console.log(id)
-        res.send("done")
-        console.log(messages)
+        res.status(200).send("message updated")
     }catch(err){
-        console.log(err)
+        res.status(400).send("bad request")
     }
     
 })
 
 
 app.delete('/messages/d/:id', function(req, res){
+    var id = req.params.id
     try{
-        var id = req.params.id
 
          for( var i = 0; i < messages.length; i++){ 
              console.log(messages[i].id)                   
@@ -78,11 +75,10 @@ app.delete('/messages/d/:id', function(req, res){
                 
             }
         }
-        res.send("done")
-        console.log(messages)
+        res.status(200).send("message deleted")
 
     }catch(err){
-        console.log(err)
+        res.status(400).send("bad request")
     }
 
 })
