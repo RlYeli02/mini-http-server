@@ -25,7 +25,7 @@ app.get('/', function (req, res){
     }
 })
 
-// const data = {id:3, message:"klk"}
+
 
 app.post('/messages', async function(req, res){
     
@@ -48,38 +48,32 @@ app.put('/messages/:id', function(req,res){
     
     var Newmessage = req.body.message
    
-    try{
+  
         messages.map((x)=>{
             if(x.id==id){
                 x.message = Newmessage;
+                res.status(200).send("message updated")
             }
             return Newmessage
         })
-        res.status(200).send("message updated")
-    }catch(err){
-        res.status(400).send("bad request")
-    }
-    
+        res.status(404).send("the message that you're trying to update doesn't exist")
+  
 })
 
 
-app.delete('/messages/d/:id', function(req, res){
+app.delete('/messages/:id', function(req, res){
     var id = req.params.id
-    try{
-
+    
          for( var i = 0; i < messages.length; i++){ 
              console.log(messages[i].id)                   
             if ( messages[i].id == id) { 
                 
                 messages.splice(i,1); 
-                
+                res.status(200).send("message deleted")
             }
         }
-        res.status(200).send("message deleted")
+        res.status(404).send("the message doesn't exist")
 
-    }catch(err){
-        res.status(400).send("bad request")
-    }
 
 })
 
